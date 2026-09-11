@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
 
-from dataset.pretrain_dataset import PretrainDataset
+from dataset.packed_pretrain_dataset import PackedPretrainDataset
 from model.config import ModelConfig
 from model.model import TinyLlama
 from train.scheduler import get_lr
@@ -27,7 +27,7 @@ def train():
     # 2. Tokenizer
     # =========================
     tokenizer = AutoTokenizer.from_pretrained(
-        "tokenizer/tokenizer_k",
+        "tokenizer/tokenizer_8k",
         local_files_only=True
     )
 
@@ -35,15 +35,14 @@ def train():
     # =========================
     # 3. Dataset
     # =========================
-    train_dataset = PretrainDataset(
+    train_dataset = PackedPretrainDataset(
         data_path="data/packed/train.bin",
-        tokenizer=tokenizer,
-        max_length=512
+        seq_len=512
     )
-    val_dataset = PretrainDataset(
+
+    val_dataset = PackedPretrainDataset(
         data_path="data/packed/val.bin",
-        tokenizer=tokenizer,
-        max_length=512
+        seq_len=512
     )
 
 
@@ -73,7 +72,7 @@ def train():
         num_layers=2,
         num_heads=4,
         intermediate_dim=344,
-        max_seq_len=128
+        max_seq_len=512
     )
 
 
@@ -105,7 +104,7 @@ def train():
     # =========================
     num_epochs = 3
     total_steps = (
-        len(dataloader)
+        len(train_dataloader)
         *
         num_epochs
     )
@@ -123,7 +122,7 @@ def train():
 
     for epoch in range(num_epochs):   #和overfit 不同的是 加上了 epoch 同时在整个dataloader 上训练 不只是在一个batch 上学习
 
-        for batch in dataloader:
+        for batch in train_dataloader:
 
             input_ids = batch["input_ids"].to(device)
 
