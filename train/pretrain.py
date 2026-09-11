@@ -35,15 +35,15 @@ def train():
     # =========================
     # 3. Dataset
     # =========================
-    dataset = PretrainDataset(
-        data_path="data/processed/pretrain.jsonl",
+    train_dataset = PretrainDataset(
+        data_path="data/packed/train.bin",
         tokenizer=tokenizer,
-        max_length=128
+        max_length=512
     )
     val_dataset = PretrainDataset(
-        data_path="data/processed/pretrain.jsonl",
+        data_path="data/packed/val.bin",
         tokenizer=tokenizer,
-        max_length=128
+        max_length=512
     )
 
 
@@ -51,19 +51,18 @@ def train():
     # =========================
     # 4. DataLoader
     # =========================
-    dataloader = DataLoader(
-        dataset,
-        batch_size=4,
+    train_dataloader = DataLoader(
+        train_dataset,
+        batch_size=8,
         shuffle=True
     )
-    print("dataset size:", len(dataset))
-    print("dataloader batches:", len(dataloader))
+   
 
     val_dataloader = DataLoader(
-    val_dataset,
-    batch_size=4,
-    shuffle=False
-)
+        val_dataset,
+        batch_size=8,
+        shuffle=False
+    )
 
     # =========================
     # 5. 模型配置
