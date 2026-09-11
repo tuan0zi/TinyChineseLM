@@ -587,10 +587,10 @@ def main():
     # 修改成你的训练数据路径
     # --------------------------------------------------------
 
-    data_path = "data/train.jsonl"
+    data_path = "data/tokenizer/tokenizer_train.jsonl"
 
     # Tokenizer 保存路径
-    save_dir = "tokenizer_k"
+    save_dir = "tokenizer/tokenizer_8k"
 
     # --------------------------------------------------------
     # 训练 Tokenizer
@@ -599,7 +599,7 @@ def main():
     train_tokenizer(
         data_path=data_path,
         save_dir=save_dir,
-        vocab_size=6144
+        vocab_size=8192
     )
 
     # --------------------------------------------------------
