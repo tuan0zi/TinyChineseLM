@@ -70,7 +70,7 @@ def is_validation_sample(   # 是否将该条数据划分进验证集
     bucket = value % 10000
 
     return bucket < int(
-        VAL_RATIO * 10000    #验证集和训练集一共弄1w 条数据
+        VAL_RATIO * 10000   
     )
 
 
@@ -80,9 +80,10 @@ def is_validation_sample(   # 是否将该条数据划分进验证集
 
 def main():
 
+    #确保目录存在
     OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True
+        parents=True,  #表示 父目录 若不存在 也一起创建
+        exist_ok=True  #若文件已经存在 不要报错
     )
 
 
@@ -162,7 +163,7 @@ def main():
                     item.get(
                         "instruction",
                         ""
-                    )
+                    )  #该函数表示 如果有 就返回该值 如果没有就返回空字符串
                 )
 
                 input_text = clean_text(
@@ -181,7 +182,7 @@ def main():
 
 
                 # --------------------------------------------
-                # 无 instruction / output 的样本不要
+                # 无 instruction / output 的样本不要  #input字段允许为空
                 # --------------------------------------------
 
                 if (
